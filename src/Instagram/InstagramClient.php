@@ -34,7 +34,7 @@ class InstagramClient extends InstagramClientBase	{
 	/**
 	 * Get media using ID
 	 */
-	public function media( $id = 0 ) {
+	public function getMedia( $id = 0 ) {
 
 		/**
 		 * Return if no ID provided
