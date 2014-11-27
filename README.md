@@ -13,6 +13,9 @@ PHP client for Instagram API
 
 ```php
 require(./autload.php);
+
+use Instagram\InstagramClient;
+
 $config = array(
 	'client_id' => 'A_B_C',
 	'client_secret' => 'X_Y_Z',
@@ -20,7 +23,7 @@ $config = array(
 );
 
 try {
-	$ig = new Instagram\InstagramClient( $config );
+	$ig = new InstagramClient( $config );
 } catch (Exception $e) {
 	echo $e->getMessage();
 }
