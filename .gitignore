@@ -1,0 +1,5 @@
+.DS_Store
+test/
+tests/
+node_modules/
+/vendor/

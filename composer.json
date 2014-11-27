@@ -1,0 +1,36 @@
+{
+    "name": "jabranr/instagram-php-sdk",
+    "type": "framework",
+    "version": "1.0.0",
+    "description": "PHP Client for Instagram API",
+    "keywords": ["instagram", "php", "sdk", "api"],
+    "minimum-stability": "stable",
+    "license": "MIT License",
+    "require": {
+        "php": ">=5.3.10"
+    },
+    "authors": [
+        {
+            "name": "Jabran Rafique",
+            "email": "hello@jabran.me",
+            "homepage": "http://jabran.me",
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Instagram\\": "src/Instagram/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Instagram\\Tests": "test/"
+        }
+    },
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "vendor",
+        "test",
+        "tests",
+    ]
+}
