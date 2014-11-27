@@ -1,9 +1,7 @@
 <?php
 
 /**
- * PHP client for Instagram API
- *
- * @version: 1.0.0
+ * @package: PHP client for Instagram API
  * @author: hello@jabran.me
  * @license: MIT License
  *
@@ -25,7 +23,6 @@ namespace Instagram;
 
 class InstagramClient extends InstagramClientBase	{
 
-
 	/**
 	 * @override: Default construct method
 	 */
@@ -35,9 +32,51 @@ class InstagramClient extends InstagramClientBase	{
 
 
 	/**
+	 * Get media using ID
+	 */
+	public function media( $id = 0 ) {
+
+		/**
+		 * Return if no ID provided
+		 */
+		if ( ! $id ) return;
+
+
+		/**
+		 * Throw exception if no valid access token
+		 */
+		if ( ! $this->access_token )
+			throw new Exception( 'Invalid access token.' );
+
+
+		/**
+		 * Set request parameters
+		 */
+		$query = array(
+				'access_token' => $this->access_token
+			);
+
+
+		/**
+		 * Set CURL request URL
+		 */
+		$options = array(
+				'url' => $this->endpoint . 'media/' . ( (int) $id ) . '?' . http_build_query( $query )
+			);
+
+
+		/**
+		 * Return response
+		 */
+		return static::_curl( $options );
+
+	}
+
+
+	/**
 	 * Get popular media
 	 */
-	public function popularMedia( $count = 25 )	{
+	public function popularMedia( $count = 30 )	{
 
 		/**
 		 * Throw exception if no valid access token

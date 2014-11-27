@@ -1,9 +1,7 @@
 <?php
 
 /**
- * PHP client for Instagram API
- *
- * @version: 1.0.0
+ * @package: PHP client for Instagram API
  * @author: hello@jabran.me
  * @license: MIT License
  *
