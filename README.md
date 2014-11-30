@@ -12,7 +12,7 @@ PHP client for Instagram API
 + Here is a basic use example:
 
 ```php
-require('./autload.php');
+require('./autoload.php');
 
 use Instagram\InstagramClient;
 
