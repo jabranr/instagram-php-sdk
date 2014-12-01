@@ -9,11 +9,14 @@
     "require": {
         "php": ">=5.3.10"
     },
+    "require-dev": {
+        "phpunit/phpunit": "4.3.*"
+    },
     "authors": [
         {
             "name": "Jabran Rafique",
             "email": "hello@jabran.me",
-            "homepage": "http://jabran.me",
+            "homepage": "http://jabran.me"
         }
     ],
     "autoload": {
@@ -31,6 +34,6 @@
         "node_modules",
         "vendor",
         "test",
-        "tests",
+        "tests"
     ]
 }
