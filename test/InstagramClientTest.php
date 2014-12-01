@@ -7,6 +7,8 @@
 
 require('./autoload.php');
 
+use Instagram\InstagramClient;
+
 class InstagramClientTest extends PHPUnit_Framework_TestCase {
 
 	/**
