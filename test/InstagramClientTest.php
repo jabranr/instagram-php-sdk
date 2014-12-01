@@ -5,7 +5,7 @@
  * @author: hello@jabran.me
  */
 
-require('../autoload.php');
+require('./autoload.php');
 
 class InstagramClientCTest extends PHPUnit_Framework_TestCase {
 	public $config, $client;
