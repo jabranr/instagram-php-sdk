@@ -32,10 +32,20 @@ class InstagramClientTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @expectedException Exception
+	 * Test exception if none argument is passed
+	 * @expectedException InvalidArgumentException
 	 */
-	public function testException() {
+	public function testInvalidArgumentException() {
 		$this->client = new InstagramClient();
+	}
+
+
+	/**
+	 * Test exception if arguments are empty or null
+	 * @expectedException InvalidArgumentException
+	 */
+	public function testEmptyArgumentException() {
+		$this->client = new InstagramClient( $this->config );
 	}
 
 

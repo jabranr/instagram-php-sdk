@@ -22,6 +22,7 @@
 namespace Instagram;
 
 use Exception;
+use InvalidArgumentException;
 
 class InstagramClientBase	{
 
@@ -341,13 +342,13 @@ class InstagramClientBase	{
 		 * Throw exception if incomplete configuration
 		 */
 		if ( !isset($config['client_id']) || ( isset($config['client_id']) && empty($config['client_id']) ) )
-			throw new Exception( 'Client ID is missing.' );
+			throw new InvalidArgumentException( 'Client ID is missing.' );
 
 		elseif ( !isset($config['client_secret']) || ( isset($config['client_secret']) && empty($config['client_secret']) ) )
-			throw new Exception( 'Client secret is missing.' );
+			throw new InvalidArgumentException( 'Client secret is missing.' );
 
 		elseif ( !isset($config['redirect_uri']) || ( isset($config['redirect_uri']) && empty($config['redirect_uri']) ) )
-			throw new Exception( 'Redirect URL is missing.' );
+			throw new InvalidArgumentException( 'Redirect URL is missing.' );
 
 
 		/**
