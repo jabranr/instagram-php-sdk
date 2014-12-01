@@ -44,6 +44,10 @@ if ( isset($ig) && $ig ) {
 		 * Make API requests. See various methods underneath.
 		 */
 	}
+
+	/**
+	 * Or display a login with Instagram link for redirect user for OAuth
+	 */
 	else {
 		echo '<a href="' . $ig->get_oauth_url() . '">Login with Insgatram</a>';
 	}
