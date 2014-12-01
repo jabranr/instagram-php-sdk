@@ -20,6 +20,7 @@
  */
 
 namespace Instagram;
+use Exception;
 
 class InstagramClient extends InstagramClientBase	{
 
@@ -36,10 +37,12 @@ class InstagramClient extends InstagramClientBase	{
 	 */
 	public function getMedia( $id = 0 ) {
 
+
 		/**
-		 * Return if no ID provided
+		 * Throw exception if no ID provided
 		 */
-		if ( ! $id ) return;
+		if ( ! $id )
+			throw new Exception( 'No media ID provided.' );
 
 
 		/**
@@ -68,8 +71,9 @@ class InstagramClient extends InstagramClientBase	{
 		/**
 		 * Return response
 		 */
-		return static::_curl( $options );
+		$this->set_data( static::_curl( $options ) );
 
+		return $this;
 	}
 
 
@@ -77,6 +81,7 @@ class InstagramClient extends InstagramClientBase	{
 	 * Get popular media
 	 */
 	public function popularMedia( $count = 30 )	{
+
 
 		/**
 		 * Throw exception if no valid access token
@@ -105,7 +110,9 @@ class InstagramClient extends InstagramClientBase	{
 		/**
 		 * Return response
 		 */
-		return static::_curl( $options );
+		$this->set_data( static::_curl( $options ) );
+
+		return $this;
 	}
 
 
@@ -113,6 +120,14 @@ class InstagramClient extends InstagramClientBase	{
 	 * Search media at Instagram
 	 */
 	public function searchMedia( $lat= '', $lng = '', $min_timestamp = '', $max_timestamp = '', $distance = '', $count = 25 )	{
+
+
+		/**
+		 * Throw exception if no lat, lng
+		 */
+		if ( ! $lat && ! $lng )
+			throw new Exception( 'Both lat and lng values are required to use this endpoint.' );
+
 
 		/**
 		 * Throw exception if no valid access token
@@ -123,21 +138,14 @@ class InstagramClient extends InstagramClientBase	{
 
 		/**
 		 * Set request parameters
+		 * Set lat lng
 		 */
 		$query = array(
+				'lat' => (float) $lat,
+				'lng' => (float) $lng,
 				'access_token' => $this->access_token,
 				'count' => (int) $count
 			);
-
-
-		/**
-		 * Set lat lng
-		 * Both values must be provided
-		 */
-		if ( $lat && $lng ) {
-			$query['lat'] = (float) $lat;
-			$query['lng'] = (float) $lng;
-		}
 
 
 		/**
@@ -172,7 +180,9 @@ class InstagramClient extends InstagramClientBase	{
 		/**
 		 * Return response
 		 */
-		return static::_curl( $options );
+		$this->set_data( static::_curl( $options ) );
+
+		return $this;
 	}
 
 }

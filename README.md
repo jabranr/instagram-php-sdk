@@ -2,8 +2,6 @@
 
 PHP client for Instagram API
 
-> NOT ready for production use yet. Do NOT use!
-
 > **Disclaimer:** Although this project shares same name with famous social network but is NOT an official version of PHP [SDKs for Instagram](http://github.com/Instagram). The package is provided as it is with no guarantee or promises so please use at your own risk. [Instagram](http://instagram.com) is product of Instagram/Facebook.
 
 
@@ -14,13 +12,13 @@ PHP client for Instagram API
 + Here is a basic use example:
 
 ```php
-require('./autoload.php');
+require('path/to/autoload.php');
 
 use Instagram\InstagramClient;
 
 $config = array(
-	'client_id' => 'A_B_C',
-	'client_secret' => 'X_Y_Z',
+	'client_id' => '_ID_',
+	'client_secret' => '_SECRET_',
 	'redirect_uri' => 'http://example.com'
 );
 
@@ -32,10 +30,37 @@ try {
 
 if ( isset($ig) && $ig ) {
 
+
 	/**
-	 * See documentation underneath for
-	 * API request methods to use here
+	 * Get a new access token with OAuth
 	 */
+
+	if ( isset($_GET['code']) ) {
+		$ig->get_access_token( $fresh = true, $_GET['code'] );
+
+		print_r( $ig->get_data() );
+
+		/**
+		 * Make API requests. See various methods underneath.
+		 */
+	}
+	else {
+		echo '<a href="' . $ig->get_oauth_url() . '">Login with Insgatram</a>';
+	}
+
+
+	/**
+	 * Or set an existing access token
+	 */
+
+	$ig->set_access_token( 'A_valid_access_token_obtained_previously' );
+
+	print_r( $ig->get_data() );
+
+	/**
+	 * Make API requests. See various methods underneath.
+	 */
+
 }
 ```
 
@@ -48,20 +73,40 @@ Use following methods to make requests to Instagram API.
 #### Get Popular Media
 
 ```php
-$media = $ig->popularMedia( (int) $count = 25 );
-$media = json_decode( $media );
+try	{
 
-print_r( $media );
+	$media = $ig->popularMedia( (int) $count = 25 );
+	$media = json_decode( $media );
+	print_r( $media );
+
+} catch(Exception $e) {
+	echo $e->getMessage();
+}
 ```
 
 
 #### Search Media
 
 ```php
-$media = $ig->searchMedia( (float) $lat, (float) $lng, (UNIX_TIMESTAMP) $min_timestamp, (UNIX_TIMESTAMP) $max_timestamp, (int) $distance, (int) $count = 25 );
-$media = json_decode( $media );
 
-print_r( $media );
+/**
+ * Atleast lat and lng are required to make requests to this endpoint
+ */
+
+try {
+	$media = $ig->searchMedia(
+					(float) $lat,
+					(float) $lng,
+					(UNIX_TIMESTAMP) $min_timestamp,
+					(UNIX_TIMESTAMP) $max_timestamp,
+					(int) $distance,
+					(int) $count = 25 );
+
+	$media = json_decode( $media );
+	print_r( $media );
+} catch(Exception $e) {
+	echo $e->getMessage();
+}
 
 ```
 
@@ -69,9 +114,11 @@ print_r( $media );
 #### Get Media using an ID
 
 ```php
-$media = $ig->getMedia( (int) $media_id );
-$media = json_decode( $media );
-
-print_r( $media );
-
+try {
+	$media = $ig->getMedia( (int) $media_id );
+	$media = json_decode( $media );
+	print_r( $media );
+} catch(Exception $e) {
+	echo $e->getMessage();
+}
 ```

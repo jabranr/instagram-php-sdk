@@ -30,6 +30,7 @@ class InstagramClientBase	{
 	 */
 	public $_options;
 	protected $_credentials;
+	protected $_data;
 
 
 	/**
@@ -73,7 +74,9 @@ class InstagramClientBase	{
 	/**
 	 * Get access token
 	 */
-	public function get_access_token()	{
+	public function get_access_token( $fresh = false, $code = '' )	{
+		if ( $fresh )
+			return $this->_get_access_token( $code );
 		return $this->access_token;
 	}
 
@@ -82,7 +85,8 @@ class InstagramClientBase	{
 	 * Set access token
 	 */
 	public function set_access_token( $token )	{
-		return $this->access_token = $token;
+		$this->access_token = $token;
+		return $this;
 	}
 
 
@@ -98,7 +102,8 @@ class InstagramClientBase	{
 	 * Set client_id
 	 */
 	public function set_client_id( $client_id )	{
-		return $this->client_id = $client_id;
+		$this->client_id = $client_id;
+		return $this;
 	}
 
 
@@ -114,7 +119,8 @@ class InstagramClientBase	{
 	 * Set client_secret
 	 */
 	public function set_client_secret( $client_secret )	{
-		return $this->client_secret = $client_secret;
+		$this->client_secret = $client_secret;
+		return $this;
 	}
 
 
@@ -130,7 +136,8 @@ class InstagramClientBase	{
 	 * Set redirect uri
 	 */
 	public function set_redirect_uri( $redirect_uri )	{
-		return $this->redirect_uri = $redirect_uri;
+		$this->redirect_uri = $redirect_uri;
+		return $this;
 	}
 
 
@@ -147,7 +154,25 @@ class InstagramClientBase	{
 	 * Scope must be in format of "likes+comments"
 	 */
 	public function set_scope( $scope )	{
-		return $this->scope = $scope;
+		$this->scope = $scope;
+		return $this;
+	}
+
+
+	/**
+	 * Get API URI
+	 */
+	public function get_api_uri()	{
+		return $this->api_uri;
+	}
+
+
+	/**
+	 * Set API URI
+	 */
+	public function set_api_uri( $api_uri )	{
+		$this->api_uri = $api_uri;
+		return $this;
 	}
 
 
@@ -163,7 +188,93 @@ class InstagramClientBase	{
 	 * Set OAuth URI
 	 */
 	public function set_oauth_uri( $oauth_uri )	{
-		return $this->oauth_uri = $oauth_uri;
+		$this->oauth_uri = $oauth_uri;
+		return $this;
+	}
+
+
+	/**
+	 * Get access token URI
+	 */
+	public function get_access_token_uri()	{
+		return $this->access_token_uri;
+	}
+
+
+	/**
+	 * Set access token URI
+	 */
+	public function set_access_token_uri( $access_token_uri )	{
+		$this->access_token_uri = $access_token_uri;
+		return $this;
+	}
+
+
+	/**
+	 * Get grant type
+	 */
+	public function get_grant_type()	{
+		return $this->grant_type;
+	}
+
+
+	/**
+	 * Set grant type
+	 */
+	public function set_grant_type( $grant_type )	{
+		$this->grant_type = $grant_type;
+		return $this;
+	}
+
+
+	/**
+	 * Get response type
+	 */
+	public function get_response_type()	{
+		return $this->response_type;
+	}
+
+
+	/**
+	 * Set response type
+	 */
+	public function set_response_type( $response_type )	{
+		$this->response_type = $response_type;
+		return $this;
+	}
+
+
+	/**
+	 * Get endpoint
+	 */
+	public function get_endpoint()	{
+		return $this->endpoint;
+	}
+
+
+	/**
+	 * Set endpoint
+	 */
+	public function set_endpoint( $endpoint )	{
+		$this->endpoint = $endpoint;
+		return $this;
+	}
+
+
+	/**
+	 * Get data
+	 */
+	public function get_data()	{
+		return $this->_data;
+	}
+
+
+	/**
+	 * Set data
+	 */
+	public function set_data( $data )	{
+		$this->_data = $data;
+		return $this;
 	}
 
 
@@ -178,11 +289,12 @@ class InstagramClientBase	{
 	/**
 	 * Get an access token for API requests
 	 */
-	public function access_token( $code )	{
+	private function _get_access_token( $code )	{
 
 		if ( empty($code) )
 			throw new Exception( 'Invalid response code for this request.' );
 
+		$response = null;
 		$options = array(
 				'post' => true,
 				'url' => $this->access_token_uri,
@@ -195,139 +307,19 @@ class InstagramClientBase	{
 					)
 			);
 
-		$response = $this->_curl( $options );
+		if ( $response = $this->_curl( $options ) ) {
 
-		if ( $response && isset($response['error_message']) )
-			throw new Exception( json_encode($response) );
+			if ( $responseArray = json_decode( $response, true ) ) {
 
-		if ( $response && isset($response['access_token']) )	{
-			$this->data = $response;
-			$this->access_token = $response['access_token'];
+				if ( isset( $responseArray['access_token'] ) )
+					$this->set_access_token( $responseArray['access_token'] );
+
+			}
 		}
+
+		$this->set_data( $response );
 
 		return $this;
-	}
-
-
-	/**
-	 * Get search results for media
-	 */
-	public function searchMedia( $lat= '', $lng = '', $min_timestamp = '', $max_timestamp = '', $distance = '', $count = 25 )	{
-
-		/**
-		 * Throw exception if no valid access token
-		 */
-		if ( ! $this->access_token )
-			throw new Exception( 'Invalid access token.' );
-
-
-		/**
-		 * Set request parameters
-		 */
-		$query = array(
-				'access_token' => $this->access_token,
-				'count' => (int) $count
-			);
-
-
-		/**
-		 * Set lat lng
-		 * Both values must be provided
-		 */
-		if ( $lat && $lng ) {
-			$query['lat'] = (float) $lat;
-			$query['lng'] = (float) $lng;
-		}
-
-
-		/**
-		 * Set minimum UNIX timestamp for request
-		 */
-		if ( $min_timestamp )
-			$query['min_timestamp'] = (int) $min_timestamp;
-
-
-		/**
-		 * Set maximum UNIX timestamp for request
-		 */
-		if ( $max_timestamp )
-			$query['max_timestamp'] = (int) $max_timestamp;
-
-
-		/**
-		 * Set distance parameter (in meters)
-		 */
-		if ( $distance )
-			$query['distance'] = (int) $distance;
-
-
-		/**
-		 * Set CURL request URL
-		 */
-		$options = array(
-				'url' => $this->endpoint . 'media/search?' . http_build_query( $query )
-			);
-
-
-		/**
-		 * Return response
-		 */
-		return $this->_curl( $options );
-	}
-
-
-	/**
-	 * Get media by ID
-	 */
-	public function searchById( $media_id = 0 )	{
-
-		$url = $this->__get('endpoint') . 'media/';
-		$url .= $media_id;
-		$url .= '?access_token=' . $this->__get('access_token');
-
-		return $this->_curl( $url );
-	}
-
-
-	/**
-	 * Get media by popularity
-	 */
-	public function searchByPopularity()	{
-
-		$url = $this->__get('endpoint') . 'media/popular';
-		$url .= '?access_token=' . $this->__get('access_token');
-
-		return $this->_curl( $url );
-	}
-
-
-	/**
-	 * Get recently tagged media
-	 */
-	public function searchByTag( $tag = '' )	{
-		if ( empty($tag) === false )	{
-			$tag = htmlentities($tag);
-			$url = $this->__get('endpoint') . 'tags/' . $tag . '/media/recent';
-			$url .= '?access_token=' . $this->__get('access_token');
-
-			return $this->_curl( $url );
-		}
-		return false;
-	}
-
-
-	/**
-	 * Get results by tag search
-	 */
-	public function searchByTagName( $tag = '' )	{
-		if ( empty($tag) === false )	{
-			$tag = htmlentities($tag);
-			$url = $this->__get('endpoint') . 'tags/search';
-			$url .= '?q=' . $tag . '&access_token=' . $this->__get('access_token');
-
-			return $url;
-		}
-		return false;
 	}
 
 
@@ -357,6 +349,12 @@ class InstagramClientBase	{
 
 
 		/**
+		 * Set data to null
+		 */
+		$this->_data = null;
+
+
+		/**
 		 * Setup API access points
 		 */
 		$this->_credentials = array(
@@ -367,8 +365,7 @@ class InstagramClientBase	{
 				'access_token_uri' => 'oauth/access_token/',
 				'grant_type' => 'authorization_code',
 				'response_type' => 'code',
-				'access_token' => '',
-				'data' => array()
+				'access_token' => ''
 			);
 
 
@@ -421,15 +418,16 @@ class InstagramClientBase	{
 				CURLOPT_USERAGENT => 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)'
 			);
 
-		if ( isset($options['post']) && $options['post'] === true ) {
-			$curl_options['CURLOPT_POST'] = true;
-
-			if ( isset($options['postfields']) && $options['postfields'] && is_array($options['postfields']) )
-				$curl_options['CURLOPT_POSTFIELDS'] = $options['postfields'];
-		}
-
 		$curl = curl_init();
 		curl_setopt_array( $curl, $curl_options );
+
+		if ( isset($options['post']) && $options['post'] === true ) {
+			curl_setopt($curl, CURLOPT_POST, true);
+
+			if ( isset($options['postfields']) && $options['postfields'] && is_array($options['postfields']) )
+				curl_setopt($curl, CURLOPT_POSTFIELDS, $options['postfields']);
+		}
+
 		$output = curl_exec( $curl );
 
 		curl_close($curl);
