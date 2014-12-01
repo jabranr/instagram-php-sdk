@@ -1,4 +1,4 @@
-# Instagram PHP SDK (Unofficial)
+# Instagram PHP SDK (Unofficial) [![Build Status](https://travis-ci.org/jabranr/instagram-php-sdk.svg)](https://travis-ci.org/jabranr/instagram-php-sdk)
 
 PHP client for Instagram API
 
