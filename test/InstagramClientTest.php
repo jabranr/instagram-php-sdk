@@ -5,8 +5,11 @@
  * @author: hello@jabran.me
  */
 
+namespace Instagram\Tests;
+
 require('./autoload.php');
 
+use PHPUnit_Framework_TestCase;
 use Instagram\InstagramClient;
 
 class InstagramClientTest extends PHPUnit_Framework_TestCase {
@@ -29,9 +32,9 @@ class InstagramClientTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @expectedException InvalidArgumentException
+	 * @expectedException Exception
 	 */
-	public function testSimpleInitialize() {
+	public function testException() {
 		$this->client = new InstagramClient();
 	}
 

@@ -21,6 +21,8 @@
 
 namespace Instagram;
 
+use Exception;
+
 class InstagramClientBase	{
 
 
