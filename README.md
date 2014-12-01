@@ -17,8 +17,8 @@ require('path/to/autoload.php');
 use Instagram\InstagramClient;
 
 $config = array(
-	'client_id' => '_ID_',
-	'client_secret' => '_SECRET_',
+	'client_id' => 'CLIENT_ID',
+	'client_secret' => 'CLIENT_SECRET',
 	'redirect_uri' => 'http://example.com'
 );
 
