@@ -7,15 +7,36 @@
 
 require('./autoload.php');
 
-class InstagramClientCTest extends PHPUnit_Framework_TestCase {
+class InstagramClientTest extends PHPUnit_Framework_TestCase {
+
+	/**
+	 * Variables
+	 */
 	public $config, $client;
 
-	public function setUp( $config = array() ) {
-		$this->config = $config;
 
-		$this->client = new InstagramClient( $this->config );
+	/**
+	 * Setup / Constructor
+	 */
+	public function setUp() {
+		$this->config = array(
+			'client_id' => '',
+			'client_secret' => '',
+			'redirect_uri' => ''
+			);
 	}
 
+	/**
+	 * @expectedException InvalidArgumentException
+	 */
+	public function testSimpleInitialize() {
+		$this->client = new InstagramClient();
+	}
+
+
+	/**
+	 * Destructor
+	 */
 	public function tearDown() {
 		unset($this->client);
 	}
