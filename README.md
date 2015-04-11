@@ -1,4 +1,4 @@
-# Instagram PHP SDK (Unofficial) [![Build Status](https://travis-ci.org/jabranr/instagram-php-sdk.svg)](https://travis-ci.org/jabranr/instagram-php-sdk)
+# Instagram PHP SDK [![Build Status](https://travis-ci.org/jabranr/instagram-php-sdk.svg)](https://travis-ci.org/jabranr/instagram-php-sdk) [![Analytics](https://ga-beacon.appspot.com/UA-50688851-1/instagram-php-sdk)](https://github.com/igrigorik/ga-beacon)
 
 PHP client for Instagram API
 
@@ -126,3 +126,7 @@ try {
 	echo $e->getMessage();
 }
 ```
+
+# License
+
+MIT License - &copy; [Jabran Rafique](http://jabran.me) 2014
